@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import font, ttk, Frame
 from PIL import Image, ImageTk
 import pickle
+from classe_pokemon import Pokemon
 
 # Fonction pour que les input poids et taille soit uniquement des float
 def valeur_valide(new_value):
@@ -12,6 +13,18 @@ def valeur_valide(new_value):
         return True
     except ValueError:
         return False
+
+# Fonction pour afficher le Pokémon sélectionné
+def afficher_pokemon(event):
+    name = liste_pokemon.curselection()
+    nom_selectionne = liste_pokemon.get(name)
+    pokemon = liste_des_pokemon.get(nom_selectionne, "")
+    label_nom.config(text=f"{pokemon.number}")
+    pass
+
+# Fonction pour enregistrer un Pokémon
+def enregistrer_pokemon():
+    pass
 
 
 
@@ -29,6 +42,7 @@ logo.place(x=20, y=10)
 
 liste_pokemon = tk.Listbox(window, height=29, borderwidth=0, highlightthickness=0)
 liste_pokemon.place(x=12, y=120)
+liste_pokemon.bind("<<ListboxSelect>>", afficher_pokemon)
 
 image_entete = ImageTk.PhotoImage(Image.open("img/logo-pokemon.png"))
 entete = tk.Label(window, image=image_entete, bg="#ee1c25")
@@ -36,7 +50,7 @@ entete.place(relx=0.5, y=60, anchor="center")
 
 chemin_police1 = "polices/Pokemon-Solid.ttf"
 police_pokemon = font.Font(family="Pokemon Solid", size=16)
-label_nom = tk.Label(window, text="#000 Nom Pokemon", font=police_pokemon, bg="#ee1c25", fg="white")
+label_nom = tk.Label(window, text="#000 MissingNo", font=police_pokemon, bg="#ee1c25", fg="white")
 label_nom.place(relx=0.5, y=140, anchor="center")
 
 image_pokemon = ImageTk.PhotoImage(Image.open("img/image_resized.png"))
@@ -118,7 +132,20 @@ ajout_image.place(relx=0.88, y=500, anchor="center")
 button_ajout = tk.Button(window, text="Ajouter votre Pokémon")
 button_ajout.place(relx=0.88, y=550, anchor="center")
 
-# Ajout de pokémon : faire deux combobox pour les types de pokémons
+arcanin = Pokemon("059", "arcanin", "feu", 1.9, 155.0)
+bulbizarre = Pokemon("001", "Bulbizarre", "Plante", 0.7, 7.9, "Poison")
+dracaufeu = Pokemon("006", "Dracaufeu", "Feu", 1.7, 90.5, "Vol")
+spectrum = Pokemon("093", "Spectrum", "Spectre", 1.6, 0.1, "Poison")
+liste_pokemon.insert(tk.END, "Bulbizarre")
+liste_pokemon.insert(tk.END, "Dracaufeu")
+liste_pokemon.insert(tk.END, "Spectrum")
+liste_pokemon.insert(tk.END, "Arcanin")
+
+nom_des_pokemon = ["Bulbizarre", "Dracaufeu", "Spectrum", "Arcanin"]
+pokemon = [bulbizarre, dracaufeu, spectrum, arcanin]
+
+
+liste_des_pokemon = dict(zip(nom_des_pokemon, pokemon))
 
 window.geometry("800x600")
 window.mainloop()
