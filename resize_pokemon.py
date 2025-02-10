@@ -1,7 +1,7 @@
 from PIL import Image
 
 # Charger l'image locale
-image = Image.open("img/missingno (2).png")
+image = Image.open("img/missingno.png")
 
 # Redimensionner en conservant les proportions
 new_width = 250
