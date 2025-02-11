@@ -111,6 +111,18 @@ def enregistrer_pokemon():
     else:
         messagebox.showinfo("Erreur", "Veuillez entrer un nom, au moins un type, une taille et un poids à votre Pokémon")
 
+# Fonction pour supprimer un Pokémon du Pokedex
+def supprimer_pokemon():
+    name = liste_pokemon.curselection()
+    if not name:
+        messagebox.showinfo("Erreur", "Aucun Pokémon sélectionné")
+        return
+    nom_selectionne = liste_pokemon.get(name)
+    pokemon = liste_des_pokemon.get(nom_selectionne, "")
+    del liste_des_pokemon[nom_selectionne]
+    liste_pokemon.delete(name)
+    enregistrer_donnees(liste_des_pokemon)
+
 
 window = tk.Tk()
 window.config(bg="#ee1c25")
@@ -124,9 +136,12 @@ image_logo = ImageTk.PhotoImage(Image.open("img/logo.png"))
 logo = tk.Label(window, image=image_logo, bg="#ee1c25")
 logo.place(x=20, y=10)
 
-liste_pokemon = tk.Listbox(window, height=29, borderwidth=0, highlightthickness=0)
+liste_pokemon = tk.Listbox(window, height=25, borderwidth=0, highlightthickness=0)
 liste_pokemon.place(x=12, y=120)
 liste_pokemon.bind("<<ListboxSelect>>", afficher_pokemon)
+
+button_delete = tk.Button(window, text="Supprimer le Pokémon", command=supprimer_pokemon)
+button_delete.place(x=73, y=550, anchor="center")
 
 image_entete = ImageTk.PhotoImage(Image.open("img/logo-pokemon.png"))
 entete = tk.Label(window, image=image_entete, bg="#ee1c25")
@@ -239,6 +254,7 @@ def enregistrer_donnees(data):
 liste_des_pokemon = chargement_donnees()
 
 for cle, valeur in liste_des_pokemon.items():
+    print(cle)
     liste_pokemon.insert(tk.END, cle)
     nom_des_pokemon.append(valeur.name)
     pokemon.append(valeur)

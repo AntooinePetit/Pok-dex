@@ -17,6 +17,8 @@ class Pokemon:
             potential_link = f"img/{self.name}.png"
             if os.path.exists(potential_link):
                 self.link = potential_link
+            else:
+                self.link = "img/missingno.png"
         else:
             if os.path.exists(link):
                 self.link = link
