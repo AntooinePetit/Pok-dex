@@ -14,7 +14,7 @@ class Pokemon:
         self.height = height
         self.weight = weight
         if link == "":
-            potential_link = f"img/{self.name}.png"
+            potential_link = f"img/{self.name.lower()}.png"
             if os.path.exists(potential_link):
                 self.link = potential_link
             else:

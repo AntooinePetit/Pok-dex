@@ -1,10 +1,9 @@
 import tkinter as tk
 from tkinter import font, ttk, Frame, messagebox
 from PIL import Image, ImageTk
-import pickle
 from classe_pokemon import Pokemon
 from tkinter import filedialog as fd
-import os
+import os, shutil, pickle
 
 # Fonction pour que les input poids et taille soit uniquement des float
 def valeur_valide(new_value):
@@ -93,10 +92,16 @@ def enregistrer_pokemon():
     weight = ajout_poids.get()
     link = ajout_image.get()
     if name != "" and type_1 != "" and height != "" and weight != "":
+        nom_image = f"{name.lower().replace(' ', '_')}.png"
+        chemin_image = os.path.join("img", nom_image)
+        try:
+            shutil.copy(link, chemin_image)
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Erreur lors de la copie de l'image : {e}")
+            return
+        link = f"img/{nom_image}"
         nom_pokemon = name.lower()
         nom_pokemon = Pokemon(name, type_1, height, weight, type_2, link)
-        nom_des_pokemon.append(name.title())
-        pokemon.append(nom_pokemon)
         liste_pokemon.insert(tk.END, name.title())
         liste_des_pokemon[name.title()] = nom_pokemon
         enregistrer_donnees(liste_des_pokemon)
@@ -150,7 +155,7 @@ entete.place(relx=0.5, y=60, anchor="center")
 chemin_police1 = "polices/Pokemon-Solid.ttf"
 police_pokemon = font.Font(family="Pokemon Solid", size=16)
 label_nom = tk.Label(window, text="MissingNo", font=police_pokemon, bg="#ee1c25", fg="white")
-label_nom.place(relx=0.5, y=140, anchor="center")
+label_nom.place(relx=0.5, y=170, anchor="center")
 
 image_pokemon = ImageTk.PhotoImage(Image.open("img/missingno.png"))
 dessin_pokemon = tk.Label(window, image=image_pokemon, bg="#ee1c25")
@@ -233,9 +238,6 @@ button_add_image.place(relx=0.88, y=503, anchor="center")
 button_ajout = tk.Button(window, text="Ajouter votre Pokémon", command=enregistrer_pokemon)
 button_ajout.place(relx=0.88, y=550, anchor="center")
 
-nom_des_pokemon = []
-pokemon = []
-
 # Mise en place de pickle
 fichier_de_sauvegarde = "pokemon_data.pk1"
 
@@ -254,10 +256,7 @@ def enregistrer_donnees(data):
 liste_des_pokemon = chargement_donnees()
 
 for cle, valeur in liste_des_pokemon.items():
-    print(cle)
     liste_pokemon.insert(tk.END, cle)
-    nom_des_pokemon.append(valeur.name)
-    pokemon.append(valeur)
 
 window.geometry("800x600")
 window.mainloop()
